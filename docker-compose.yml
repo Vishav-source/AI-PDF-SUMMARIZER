@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: /infrastructure/docker/Dockerfile
+    env_file:
+      - ./backend/.env
+    environment:
+      - OPENAI_MODEL=gpt-3.5-turbo-0125
+      - PORT=3000
+      - FRONTEND_APP_URL=http://localhost:5173
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend/database:/usr/src/app/database
+      - ./backend/public:/usr/src/app/public
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: /infrastructure/docker/Dockerfile
+    env_file:
+      - ./frontend/.env
+    environment:
+      - VITE_API_URL=http://localhost:3000
+    ports:
+      - "5173:5173"
